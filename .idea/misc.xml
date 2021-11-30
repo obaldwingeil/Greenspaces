@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/add_box.xml" value="0.17864583333333334" />
+        <entry key="app/src/main/res/drawable/customborder.xml" value="0.18229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.18229166666666666" />
+        <entry key="app/src/main/res/drawable/ic_maptoggle.xml" value="0.1859375" />
+        <entry key="app/src/main/res/drawable/list.xml" value="0.1859375" />
+        <entry key="app/src/main/res/drawable/sort_selected.xml" value="0.18229166666666666" />
+        <entry key="app/src/main/res/drawable/web.xml" value="0.19635416666666666" />
+        <entry key="app/src/main/res/layout/activity_camera.xml" value="0.12907608695652173" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/activity_location.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1431159420289855" />
+        <entry key="app/src/main/res/layout/activity_review.xml" value="0.1625" />
+        <entry key="app/src/main/res/layout/entitlements.xml" value="0.18020833333333333" />
+        <entry key="app/src/main/res/layout/fragment_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_myreviews.xml" value="0.13994565217391305" />
+        <entry key="app/src/main/res/layout/fragment_photos.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/fragment_reviews.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/item_image.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/item_location.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/item_review.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/myreviews_fragment.xml" value="0.13994565217391305" />
+        <entry key="app/src/main/res/layout/popup_filtermenu.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/popup_map.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/popup_noresults.xml" value="0.12817028985507245" />
+        <entry key="app/src/main/res/layout/popup_sortmenu.xml" value="0.13994565217391305" />
+        <entry key="app/src/main/res/menu/menu_filter.xml" value="0.16614583333333333" />
+        <entry key="app/src/main/res/menu/menu_sort.xml" value="0.16614583333333333" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

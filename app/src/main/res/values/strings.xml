@@ -1,0 +1,91 @@
+<resources>
+
+    // paste the url that is hosting the server here:
+    <string name="api_root">https://baldwin-greenspaces.herokuapp.com/</string> // http://134.69.212.136:5000/
+
+    <string name="mapbox_access_token">pk.eyJ1Ijoib2JhbGR3aW5nZWlsIiwiYSI6ImNrbGVoaDU3MTFlaGUyb3BjMzJuNjFrbTkifQ.cdIUohzmpDBF4kAUcHJqMg</string>
+
+    <string name="app_name">Greenspaces</string>
+    <string name="name">Name</string>
+    <string name="type">Type</string>
+    <string name="directions">Get Directions</string>
+    <string name="description">description</string>
+    <string name="show">show more</string>
+    <string name="reviews">reviews</string>
+    <string name="photos">photos</string>
+    <string name="details">details</string>
+    <string name="hours">hours</string>
+    <string name="link">Visit Website</string>
+
+    <string name="activities">Activities: </string>
+    <string name="features">Features: </string>
+
+    <string name="write">write a review</string>
+    <string name="contact">Contact</string>
+    <string name="phone">phone</string>
+    <string name="email">email</string>
+
+    <string name="no_reviews">0</string>
+    <string name="zero">0 Reviews</string>
+
+    <string name="map">Map</string>
+    <string name="search">Search</string>
+    <string name="review">Review</string>
+    <string name="profile">Profile</string>
+
+    <string name="filter">FILTER</string>
+    <string name="sort">SORT</string>
+
+    <string name="settings">SETTINGS</string>
+    <string name="my_reviews">MY REVIEWS</string>
+    <string name="my_photos">MY PHOTOS</string>
+
+    <string name="city_park">city park</string>
+    <string name="garden">garden</string>
+    <string name="dog_park">dog park</string>
+    <string name="open_water">open water facility</string>
+    <string name="beach">beach</string>
+    <string name="national_park">national park</string>
+    <string name="campground">campground</string>
+    <string name="golf">golf course</string>
+    <string name="pool">pool</string>
+
+    <string name="rating">Minimum Rating</string>
+    <string name="sports">Courts / Fields</string>
+
+    <string name="uap">Universally Accessible Playground (UAP)</string>
+    <string name="hiking_trail">Hiking / Jogging trail</string>
+    <string name="playground">Play area / Playground </string>
+    <string name="toilets">Bathrooms</string>
+    <string name="showers">Showers</string>
+    <string name="picnic">Picnic Area</string>
+    <string name="restaurant">Restaurant / Cafe</string>
+    <string name="bike_path">Bike Path</string>
+    <string name="fishing">Fishing</string>
+    <string name="sailing">Boating / Sailing</string>
+
+    <string name="football">Football</string>
+    <string name="soccer">Soccer</string>
+    <string name="basketball">Basketball</string>
+    <string name="softball">Softball</string>
+    <string name="baseball">Baseball</string>
+    <string name="volleyball">Volleyball</string>
+    <string name="tennis">Tennis</string>
+
+    <string name="apply_filters">APPLY FILTERS</string>
+    <string name="exit">X</string>
+    <string name="clear">CLEAR ALL</string>
+    <string name="only_saved">Only show my saved locations</string>
+    <string name="filter_features">Features</string>
+    <string name="no_results">There are no locations that match your criteria. Please change your selections and try again.</string>
+
+    <string name="distance">Distance</string>
+    <string name="high_rating">Highest Rated</string>
+    <string name="alphabetical">Alphabetical</string>
+
+    <string name="rev_rating">Rating: </string>
+    <string name="add_rev">Add description…</string>
+    <string name="post">Post Review</string>
+    <string name="take_picture">Take Picture</string>
+
+</resources>

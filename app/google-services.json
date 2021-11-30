@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "113445291267",
+    "project_id": "greenspaces-dd874",
+    "storage_bucket": "greenspaces-dd874.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113445291267:android:40581b7a08593d8f201536",
+        "android_client_info": {
+          "package_name": "com.example.greenspaces"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "113445291267-rbetmltbhse1udabvj57alftiqrs8chk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbBEL2jVlIAiv8i2aoQX7ESjmVmuIZ2Tc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "113445291267-rbetmltbhse1udabvj57alftiqrs8chk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
