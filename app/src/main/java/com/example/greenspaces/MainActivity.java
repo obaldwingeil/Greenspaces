@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             // success!
+            getUser(account);
             open();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

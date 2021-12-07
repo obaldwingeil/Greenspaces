@@ -1,6 +1,7 @@
 package com.example.greenspaces;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,7 @@ import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -64,7 +66,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -74,6 +78,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -84,6 +89,7 @@ public class MapFragment extends Fragment {
     private MapView mapView;
     private PermissionsManager permissionsManager;
     private MapboxMap mp;
+    private ValueAnimator markerAnimator;
 
     View view;
     Context context;
@@ -104,7 +110,10 @@ public class MapFragment extends Fragment {
     private LinearLayout linearLayout_locationItem;
     private Boolean open;
 
+    private Boolean markerSelected = false;
+
     private PopupWindow popupWindow;
+    private View popupView;
 
     FusedLocationProviderClient mFusedLocationClient;
 
@@ -132,7 +141,7 @@ public class MapFragment extends Fragment {
 
         if (getArguments() != null && getArguments().getStringArrayList("location_ids") != null) {
             location_ids = getArguments().getStringArrayList("location_ids");
-            Log.d("bundle", "received bundle");
+            getArguments().clear();
         } else {
             location_ids = null;
             showNoResultsWindow();
@@ -153,22 +162,70 @@ public class MapFragment extends Fragment {
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
                         UiSettings uiSettings = mapboxMap.getUiSettings();
+                        SymbolLayer layer = (SymbolLayer) style.getLayer("greenspaces");
+                        assert layer != null;
                         if(location_ids != null && location_ids.size() != 0){
-                            SymbolLayer layer = (SymbolLayer) style.getLayerAs("greenspaces");
-                            assert layer != null;
                             Log.d("map filter", "did something");
-                            // layer.setFilter(Expression.in(Expression.get("location_id"), Expression.literal(location_ids)));
+                            layer.setFilter(Expression.in(Expression.get("location_id"), Expression.literal(String.valueOf(location_ids))));
+                        } else {
+                            layer.setFilter(Expression.neq(Expression.literal(""), ""));
                         }
+
+                        Expression iconDecider = Expression.switchCase(
+                                Expression.eq(Expression.get("type"), Expression.literal("golf course")), Expression.literal("golf-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("pool")), Expression.literal("pool-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("open water facility")), Expression.literal("water-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("beach")), Expression.literal("beach-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("campground")), Expression.literal("campsite-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("dog park")), Expression.literal("dog-park-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("garden")), Expression.literal("garden-selected"),
+                                Expression.eq(Expression.get("type"), Expression.literal("national park")), Expression.literal("napark-selected"),
+                                Expression.literal("park-selected")
+                        );
+
+                        style.addSource(new GeoJsonSource("selected-marker"));
+                        style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
+                                .withProperties(
+                                        PropertyFactory.iconHaloWidth(5f),
+                                        PropertyFactory.iconHaloColor("#FFFFFF"),
+                                        PropertyFactory.iconHaloBlur(2f),
+                                        PropertyFactory.iconImage(iconDecider),
+                                        PropertyFactory.iconAllowOverlap(true))
+                        );
 
                         mp.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
                             @Override
                             public boolean onMapClick(@NonNull LatLng point) {
+                                final SymbolLayer selectedMarkerSymbolLayer = (SymbolLayer) style.getLayer("selected-marker-layer");selectedMarkerSymbolLayer.setSourceLayer("selected-marker");
                                 final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
 
                                 List<Feature> features = mapboxMap.queryRenderedFeatures(pixel, "greenspaces");
+                                List<Feature> selectedFeature = mapboxMap.queryRenderedFeatures(
+                                        pixel, "selected-marker-layer");
 
-                                // Get the first feature within the list if one exist
+                                if (selectedFeature.size() > 0 && markerSelected) {
+                                    return false;
+                                }
+
+                                if (features.isEmpty()) {
+                                    if (markerSelected) {
+                                        deselectMarker(selectedMarkerSymbolLayer);
+                                    }
+                                    return false;
+                                }
+
+                                GeoJsonSource source = style.getSourceAs("selected-marker");
+                                if (source != null) {
+                                    Feature newFeature = Feature.fromGeometry(features.get(0).geometry(), features.get(0).properties());
+                                    source.setGeoJson(FeatureCollection.fromFeatures(
+                                            new Feature[]{newFeature}));
+                                }
+
+                                if (markerSelected) {
+                                    deselectMarker(selectedMarkerSymbolLayer);
+                                }
                                 if (features.size() > 0) {
+                                    pulseIcon(selectedMarkerSymbolLayer);
                                     Feature feature = features.get(0);
 
                                     // Ensure the feature has properties defined
@@ -177,7 +234,7 @@ public class MapFragment extends Fragment {
                                         LatLng latlng = new LatLng(point1.coordinates().get(1), point1.coordinates().get(0));
                                         CameraPosition position = new CameraPosition.Builder()
                                                 .target(latlng)
-                                                .zoom(15)
+                                                .zoom(12)
                                                 .build();
                                         mp.animateCamera(CameraUpdateFactory.newCameraPosition(position), 3000);
                                         showPopupWindow(feature);
@@ -194,6 +251,67 @@ public class MapFragment extends Fragment {
         return view;
     }
 
+    public void closePopup(){
+        if(popupWindow != null){
+            popupWindow.dismiss();
+        }
+    }
+
+    private void pulseIcon(final SymbolLayer iconLayer) {
+        mp.getStyle(new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                markerAnimator = new ValueAnimator();
+                markerAnimator.setFloatValues(1f, 2f);
+                markerAnimator.setDuration(300);
+                // markerAnimator.setRepeatCount(ValueAnimator.INFINITE);
+                // markerAnimator.setRepeatMode(ValueAnimator.REVERSE);
+                markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        iconLayer.setProperties(
+                                PropertyFactory.iconSize((float) animator.getAnimatedValue())
+                        );
+                    }
+                });
+                markerAnimator.start();
+            }
+        });
+    }
+
+    private void selectMarker(final SymbolLayer iconLayer) {
+        markerAnimator = new ValueAnimator();
+        markerAnimator.setObjectValues(1f, 2f);
+        markerAnimator.setDuration(300);
+        markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                iconLayer.setProperties(
+                        PropertyFactory.iconSize((float) animator.getAnimatedValue())
+                );
+            }
+        });
+        markerAnimator.start();
+        markerSelected = true;
+    }
+
+    private void deselectMarker(final SymbolLayer iconLayer) {
+        markerAnimator.setObjectValues(2f, 1f);
+        markerAnimator.setDuration(300);
+        markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                iconLayer.setProperties(
+                        PropertyFactory.iconSize((float) animator.getAnimatedValue())
+                );
+            }
+        });
+        markerAnimator.start();
+        markerSelected = false;
+    }
+
     public void showNoResultsWindow(){
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -205,14 +323,17 @@ public class MapFragment extends Fragment {
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 300);
     }
 
     public void showPopupWindow(Feature feature){
+        if(popupWindow != null){
+            popupWindow.dismiss();
+        }
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_map, null);
+        popupView = inflater.inflate(R.layout.popup_map, null);
 
         imageView_collapse = popupView.findViewById(R.id.imageView_collapse);
         Picasso.get().load("file:///android_asset/collapse.png").into(imageView_collapse);
@@ -252,7 +373,7 @@ public class MapFragment extends Fragment {
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 300);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 200);
 
         // dismiss the popup window when touched
         popupView.setOnTouchListener(new View.OnTouchListener() {
@@ -508,20 +629,27 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        if(popupView != null){
+            popupView.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        if(popupView != null){
+            popupView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mapView.onStop();
-        if(popupWindow != null){
-            popupWindow.dismiss();
+        if(popupView != null){
+            popupView.setVisibility(View.GONE);
         }
     }
 

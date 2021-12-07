@@ -8,9 +8,6 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@color/faded_medium_green"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -216,12 +213,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="4dp"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:scaleX="1.5"
-                    android:scaleY="1.5" />
+                    android:scaleX="1.25"
+                    android:scaleY="1.25" />
 
                 <TextView
                     android:id="@+id/textView_numReviews"
@@ -240,6 +237,21 @@
             android:layout_margin="8dp"
             android:text="@string/write" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_noLocationReviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/no_reviews_message"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_reviews"

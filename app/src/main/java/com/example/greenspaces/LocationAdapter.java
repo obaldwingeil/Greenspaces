@@ -91,7 +91,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         }
 
         holder.ratingBar_list.setRating(location.getRating());
-        Picasso.get().load(location.getImages().get(0).getUrl()).into(holder.imageView_list);
+        if(location.getImages().size() == 0){
+            holder.imageView_list.setVisibility(View.GONE);
+        } else {
+            Picasso.get().load(location.getImages().get(0).getUrl()).into(holder.imageView_list);
+        }
 
         if(location.isSaved()){
             Picasso.get().load("file:///android_asset/saved.png").into(holder.imageView_listSaved);

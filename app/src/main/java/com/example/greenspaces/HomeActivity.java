@@ -22,10 +22,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        /* Intent intent = getIntent();
-        _id = intent.getStringExtra("_id");
-        name = intent.getStringExtra("name"); */
-
         FragmentManager fm = getSupportFragmentManager();
 
         HomeAdapter adapter = new HomeAdapter(fm, getLifecycle());

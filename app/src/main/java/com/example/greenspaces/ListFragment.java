@@ -51,7 +51,7 @@ public class ListFragment extends Fragment {
         if (getArguments() != null && getArguments().getSerializable("locationArrayList") != null) {
             locationArrayList = (ArrayList<Location>) getArguments().getSerializable("locationArrayList");
             displayLocations();
-            Log.d("bundle", "received bundle");
+            getArguments().clear();
         } else {
             recyclerView_list.setVisibility(View.GONE);
             textView_noResults.setVisibility(View.VISIBLE);

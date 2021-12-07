@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 public class MyReviewsFragment extends Fragment {
 
     private RecyclerView recyclerView_myReviews;
+    private TextView textView_noReviews;
 
     View view;
     Context context;
@@ -56,6 +58,7 @@ public class MyReviewsFragment extends Fragment {
         user_id = sharedPreferences.getString("user_id", null);
 
         recyclerView_myReviews = view.findViewById(R.id.recyclerView_myReviews);
+        textView_noReviews = view.findViewById(R.id.textView_noReviews);
 
         reviewList = new ArrayList<>();
         reviewIDs = new ArrayList<>();
@@ -98,7 +101,8 @@ public class MyReviewsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                textView_noReviews.setVisibility(View.VISIBLE);
+                recyclerView_myReviews.setVisibility(View.GONE);
             }
         });
     }

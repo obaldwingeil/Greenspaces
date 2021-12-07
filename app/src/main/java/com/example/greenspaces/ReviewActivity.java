@@ -92,16 +92,18 @@ public class ReviewActivity extends AppCompatActivity {
         ImageView add = new ImageView(this);
         lp = new FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(8, 8, 8, 8);
-        lp.setWidth(300);
-        lp.setHeight(300);
+        lp.setWidth(150);
+        lp.setHeight(150);
         add.setLayoutParams(lp);
         add.setImageDrawable(getResources().getDrawable(R.drawable.add_box, null));
+        TextView addImage = new TextView(this);
+        addImage.setLayoutParams(lp);
+        addImage.setText(R.string.add_image);
         flex.addView(add);
+        flex.addView(addImage);
 
         add.setOnClickListener(v -> openCamera());
         button_post.setOnClickListener(v -> postReview());
-
-
     }
 
     @Override

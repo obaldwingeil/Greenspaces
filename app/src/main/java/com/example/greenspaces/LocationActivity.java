@@ -2,7 +2,6 @@ package com.example.greenspaces;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,13 +35,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
@@ -90,6 +86,8 @@ public class LocationActivity extends AppCompatActivity {
 
     private Double latitude;
     private Double longitude;
+    private Float user_lat;
+    private Float user_long;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
@@ -97,7 +95,7 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location);
 
         scrollView_location = findViewById(R.id.scrollView_location);
-        textView_name = findViewById(R.id.textView_plantName);
+        textView_name = findViewById(R.id.textView_locationName);
         imageView_locationSaved = findViewById(R.id.imageView_locationSaved);
         textView_type = findViewById(R.id.textView_type);
         ratingBar_location = findViewById(R.id.ratingBar_location);
@@ -123,6 +121,9 @@ public class LocationActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
         user_id = sharedPreferences.getString("user_id", null);
+        user_lat = sharedPreferences.getFloat("user_latitude", 0.9f);
+        user_long = sharedPreferences.getFloat("user_longitude", 0.9f);
+
         saved = false;
 
         api_root = getString(R.string.api_root);
@@ -134,7 +135,6 @@ public class LocationActivity extends AppCompatActivity {
         button_reviews.setOnClickListener(v -> {
             loadFragment(new ReviewsFragment(), R.id.fragContainer_user);
         });
-        button_reviews.callOnClick();
 
         button_photos.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
@@ -165,6 +165,7 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        images = new ArrayList<>();
         getLocation();
     }
 
@@ -351,8 +352,10 @@ public class LocationActivity extends AppCompatActivity {
                         textView_email.setVisibility(View.VISIBLE);
                     }
 
-                    latitude = location.getDouble("latitude");
-                    longitude = location.getDouble("longitude");
+                    latitude = location.getDouble("lat");
+                    longitude = location.getDouble("long");
+
+                    button_reviews.callOnClick();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -460,8 +463,7 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     public void getDirections(){
-        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
-        Uri gmmIntentUri = Uri.parse(uri);
+        Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" + user_lat + "," + user_long + "&destination=" + latitude + "," + longitude);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         if (mapIntent.resolveActivity(getPackageManager()) != null) {

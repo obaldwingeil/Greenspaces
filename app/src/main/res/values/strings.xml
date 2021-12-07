@@ -1,7 +1,7 @@
 <resources>
 
     // paste the url that is hosting the server here:
-    <string name="api_root">https://baldwin-greenspaces.herokuapp.com/</string> // http://134.69.212.136:5000/
+    <string name="api_root">http://134.69.212.136:5001/</string> // http://134.69.212.136:5000/https://baldwin-greenspaces.herokuapp.com/
 
     <string name="mapbox_access_token">pk.eyJ1Ijoib2JhbGR3aW5nZWlsIiwiYSI6ImNrbGVoaDU3MTFlaGUyb3BjMzJuNjFrbTkifQ.cdIUohzmpDBF4kAUcHJqMg</string>
 
@@ -39,6 +39,11 @@
     <string name="settings">SETTINGS</string>
     <string name="my_reviews">MY REVIEWS</string>
     <string name="my_photos">MY PHOTOS</string>
+
+    <string name="no_reviews_message">No Reviews</string>
+    <string name="no_photos">No Photos</string>
+
+    <string name="logout">Log Out</string>
 
     <string name="city_park">city park</string>
     <string name="garden">garden</string>
@@ -87,5 +92,6 @@
     <string name="add_rev">Add description…</string>
     <string name="post">Post Review</string>
     <string name="take_picture">Take Picture</string>
+    <string name="add_image">Add Images</string>
 
 </resources>

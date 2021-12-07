@@ -1,6 +1,7 @@
 package com.example.greenspaces;
 
 import android.content.Context;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,6 @@ public class HomeAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

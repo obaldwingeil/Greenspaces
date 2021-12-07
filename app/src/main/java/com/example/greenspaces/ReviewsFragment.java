@@ -49,6 +49,7 @@ public class ReviewsFragment extends Fragment {
     private TextView textView_numReviews;
     private RecyclerView recyclerView_reviews;
     private Button button_write;
+    private TextView textView_noReviews;
 
     private ArrayList<Review> reviewList;
 
@@ -76,6 +77,7 @@ public class ReviewsFragment extends Fragment {
         textView_numReviews = view.findViewById(R.id.textView_numReviews);
         recyclerView_reviews = view.findViewById(R.id.recyclerView_reviews);
         button_write = view.findViewById(R.id.button_write);
+        textView_noReviews = view.findViewById(R.id.textView_noLocationReviews);
 
         activity = (LocationActivity)getActivity();
         assert activity != null;
@@ -172,7 +174,8 @@ public class ReviewsFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                textView_noReviews.setVisibility(View.VISIBLE);
+                recyclerView_reviews.setVisibility(View.GONE);
             }
         });
     }

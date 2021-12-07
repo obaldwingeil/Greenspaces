@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,7 @@ public class PhotosFragment extends Fragment {
     private String api_root;
 
     private FlexboxLayout flex;
+    private TextView textView_noPhotos;
 
     private String id;
     private String parent;
@@ -57,6 +59,7 @@ public class PhotosFragment extends Fragment {
         context = view.getContext();
 
         flex = view.findViewById(R.id.flexBox_photos);
+        textView_noPhotos = view.findViewById(R.id.textView_noPhotos);
 
         api_root = getString(R.string.api_root);
 
@@ -109,7 +112,8 @@ public class PhotosFragment extends Fragment {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                    textView_noPhotos.setVisibility(View.VISIBLE);
+                    flex.setVisibility(View.GONE);
                 }
             });
         } catch (JSONException|UnsupportedEncodingException e) {

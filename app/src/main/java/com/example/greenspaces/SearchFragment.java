@@ -67,6 +67,7 @@ public class SearchFragment extends Fragment {
     private SearchView searchView;
     private TextView textView_filter;
     private TextView textView_sort;
+    private View view_divider;
 
     private View popupView;
     private PopupWindow popupWindow;
@@ -94,6 +95,8 @@ public class SearchFragment extends Fragment {
     private Double latitude;
     private Double longitude;
 
+    private MapFragment currentFragment;
+
     private String searchQuery;
 
     int PERMISSION_ID = 44;
@@ -107,6 +110,7 @@ public class SearchFragment extends Fragment {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private String user_id;
 
     public SearchFragment(){}
@@ -121,24 +125,34 @@ public class SearchFragment extends Fragment {
 
         sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         user_id = sharedPreferences.getString("user_id", null);
+        editor = sharedPreferences.edit();
 
         textView_filter = view.findViewById(R.id.textView_filter);
         textView_sort = view.findViewById(R.id.textView_sort);
         searchView = view.findViewById(R.id.searchView);
         toggleButton_map = view.findViewById(R.id.toggleButton_map);
+        view_divider = view.findViewById(R.id.view_divider);
 
         searchQuery = "";
+
+        searchView.setOnSearchClickListener(v -> {
+            currentFragment.closePopup();
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchQuery = query;
                 applyFilters();
                 searchView.clearFocus();
+                currentFragment.closePopup();
+                Log.d("search query", "query text listener");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                currentFragment.closePopup();
                 return false;
             }
         });
@@ -168,6 +182,7 @@ public class SearchFragment extends Fragment {
         latitude = 0.0;
         longitude = 0.0;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        getLastLocation();
 
         features = new ArrayList<>(Arrays.asList(
                 getString(R.string.uap),
@@ -196,12 +211,20 @@ public class SearchFragment extends Fragment {
         bundle.putStringArrayList("location_ids", location_ids);
         MapFragment mapFragment = new MapFragment();
         mapFragment.setArguments(bundle);
+        currentFragment = mapFragment;
         loadFragment(mapFragment, R.id.fragmentContainer_search);
 
         toggleButton_map.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 applyFilters();
+                if(isChecked){
+                    textView_sort.setVisibility(View.GONE);
+                    view_divider.setVisibility(View.GONE);
+                } else {
+                    textView_sort.setVisibility(View.VISIBLE);
+                    view_divider.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -391,6 +414,7 @@ public class SearchFragment extends Fragment {
             body.put("minRating", String.valueOf(rating));
             body.put("sortBy", sortBy);
             body.put("point", point);
+            Log.d("point", String.valueOf(point));
             body.put("searchQuery", searchQuery);
             body.put("userId", user_id);
             body.put("saved", only_saved);
@@ -434,6 +458,7 @@ public class SearchFragment extends Fragment {
                         loadFragment(new MapFragment(), R.id.fragmentContainer_search);
                     }
                     locationArrayList = new ArrayList<>();
+                    location_ids = new ArrayList<>();
                 }
             });
         } catch (JSONException | UnsupportedEncodingException e) {
@@ -476,12 +501,14 @@ public class SearchFragment extends Fragment {
                             ListFragment listFragment = new ListFragment();
                             listFragment.setArguments(bundle);
                             loadFragment(listFragment, R.id.fragmentContainer_search);
+                            currentFragment = null;
                             locationArrayList = new ArrayList<>();
                         } else {
                             Bundle bundle = new Bundle();
                             bundle.putStringArrayList("location_ids", location_ids);
                             MapFragment mapFragment = new MapFragment();
                             mapFragment.setArguments(bundle);
+                            currentFragment = mapFragment;
                             loadFragment(mapFragment, R.id.fragmentContainer_search);
                         }
 
@@ -521,7 +548,9 @@ public class SearchFragment extends Fragment {
                         } else {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Log.d("gotcha", latitude + ", " + longitude);
+                            editor.putFloat("user_latitude", latitude.floatValue());
+                            editor.putFloat("user_longitude", longitude.floatValue());
+                            editor.apply();
                         }
                     }
                 });
@@ -557,8 +586,12 @@ public class SearchFragment extends Fragment {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             android.location.Location mLastLocation = locationResult.getLastLocation();
+            editor.clear();
             latitude = mLastLocation.getLatitude();
             longitude = mLastLocation.getLongitude();
+            editor.putFloat("user_latitude", latitude.floatValue());
+            editor.putFloat("user_longitude", longitude.floatValue());
+            editor.apply();
         }
     };
 
@@ -598,8 +631,13 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (checkPermissions()) {
-            // getLastLocation();
+            getLastLocation();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }
 
