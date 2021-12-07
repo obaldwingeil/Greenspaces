@@ -38,6 +38,7 @@ Now navigate to the `read_data.py` file. Run this file and you should get a disp
    WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://134.69.212.136:5001/ (Press CTRL+C to quit)
  ```
+ Keep this file running while using the app. 
  
  Copy the url where the server is running. In the example above, that is this url: 
  > http://134.69.212.136:5001/
