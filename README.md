@@ -18,7 +18,7 @@ Enter this url https://github.com/obaldwingeil/Greenspaces.git in the URL box an
 
 Once you are loaded into android studio, you're ready to set up the backend. Repeat the steps from above in your python IDE to create a new python project from version control using the url for the Greenspaces-backend repo. 
 
-For example, in pycharm, click the Get from Version Control Option displayed here:
+For example, in pycharm, click the `Get from Version Control` option displayed here:
 
 ![PyCharm From Version Contrl Image](https://github.com/obaldwingeil/Greenspaces/blob/main/Py-from-version-control.png?raw=true)
 
