@@ -9,7 +9,7 @@ Greenspaces is written in Java using Android Studio with a server and web scrape
 
 In order to run the app in a development state, you will need to download Android Studio and some IDE suitible for python. I use PyCharm. You will also need to set up an instance of a MySQL database. To do this and monitor my database, I used MySQL workbench.
 
-In Android Studio, Create a new project from version control by going to File --> New... --> Project from version control. As pictured below. 
+In Android Studio, create a new project from version control by going to File --> New... --> Project from version control. As pictured below. 
 
 ![Android Studio From Version Control Image](https://github.com/obaldwingeil/Greenspaces/blob/main/AS-from-version-control.png?raw=true)
 
