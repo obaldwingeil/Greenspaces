@@ -133,7 +133,7 @@ public class LocationActivity extends AppCompatActivity {
         getLocation();
 
         button_reviews.setOnClickListener(v -> {
-            loadFragment(new ReviewsFragment(), R.id.fragContainer_user);
+            loadFragment(new ReviewsFragment(), R.id.fragContainer_location);
         });
 
         button_photos.setOnClickListener(v -> {
@@ -142,7 +142,7 @@ public class LocationActivity extends AppCompatActivity {
             bundle.putString("parent", "location");
             PhotosFragment photosFragment = new PhotosFragment();
             photosFragment.setArguments(bundle);
-            loadFragment(photosFragment, R.id.fragContainer_user);
+            loadFragment(photosFragment, R.id.fragContainer_location);
         });
 
         button_directions.setOnClickListener(v -> getDirections());
@@ -150,16 +150,6 @@ public class LocationActivity extends AppCompatActivity {
 
         imageView_locationSaved.setOnClickListener(v -> addLocation());
         checkSavedLocation();
-
-        /*
-        ratingBar_location.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                scrollView_location.scrollTo(0, button_reviews.getScrollY());
-                Log.d("rating", "clicked");
-                return false;
-            }
-        });*/
     }
 
     @Override
@@ -448,16 +438,10 @@ public class LocationActivity extends AppCompatActivity {
 
     public void openWebsite(){
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        Log.d("link", String.valueOf(Uri.parse(url)));
-        // check to make sure that there is an app or activity that can handle this action
-        // Log.d("activity", intent.resolveActivity(getPackageManager()).toString());
-        // tells you which apps/activities can handle this intent
         if (intent.resolveActivity(getPackageManager()) != null){
-            // send the intent
             startActivity(intent);
         }
         else{
-            // if not, log the error
             Log.e("intent", "cannot handle intent");
         }
     }

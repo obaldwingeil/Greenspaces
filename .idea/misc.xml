@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.165" />
         <entry key="app/src/main/res/layout/item_image.xml" value="0.16576086956521738" />
-        <entry key="app/src/main/res/layout/item_location.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/item_location.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_review.xml" value="0.16576086956521738" />
         <entry key="app/src/main/res/layout/myreviews_fragment.xml" value="0.13994565217391305" />
         <entry key="app/src/main/res/layout/popup_filtermenu.xml" value="0.25" />

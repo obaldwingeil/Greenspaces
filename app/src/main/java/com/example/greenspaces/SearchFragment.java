@@ -136,7 +136,9 @@ public class SearchFragment extends Fragment {
         searchQuery = "";
 
         searchView.setOnSearchClickListener(v -> {
-            currentFragment.closePopup();
+            if(currentFragment != null){
+                currentFragment.closePopup();
+            }
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -145,14 +147,18 @@ public class SearchFragment extends Fragment {
                 searchQuery = query;
                 applyFilters();
                 searchView.clearFocus();
-                currentFragment.closePopup();
+                if(currentFragment != null){
+                    currentFragment.closePopup();
+                }
                 Log.d("search query", "query text listener");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                currentFragment.closePopup();
+                if(currentFragment != null){
+                    currentFragment.closePopup();
+                }
                 return false;
             }
         });
@@ -535,10 +541,6 @@ public class SearchFragment extends Fragment {
             // check if location is enabled
             if (isLocationEnabled()) {
 
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<android.location.Location>() {
                     @Override
                     public void onComplete(@NonNull Task<android.location.Location> task) {
@@ -558,8 +560,7 @@ public class SearchFragment extends Fragment {
                 Toast.makeText(context, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
             }
         } else {
-            // if permissions aren't available,
-            // request for permissions
+            // if permissions aren't available, request for permissions
             requestPermissions();
         }
     }
@@ -567,16 +568,14 @@ public class SearchFragment extends Fragment {
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
 
-        // Initializing LocationRequest
-        // object with appropriate methods
+        // Initializing LocationRequest object with appropriate methods
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(5);
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
 
-        // setting LocationRequest
-        // on FusedLocationClient
+        // setting LocationRequest on FusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
@@ -607,8 +606,7 @@ public class SearchFragment extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
-    // method to check
-    // if location is enabled
+    // method to check if location is enabled
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);

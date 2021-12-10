@@ -71,8 +71,6 @@ public class ReviewActivity extends AppCompatActivity {
         if(intent != null){
             location_name = intent.getStringExtra("location_name");
             location_id = intent.getStringExtra("location_id");
-        } else {
-            // add search for locations
         }
 
         api_root = getString(R.string.api_root);
@@ -92,8 +90,8 @@ public class ReviewActivity extends AppCompatActivity {
         ImageView add = new ImageView(this);
         lp = new FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(8, 8, 8, 8);
-        lp.setWidth(150);
-        lp.setHeight(150);
+        lp.setWidth(300);
+        lp.setHeight(300);
         add.setLayoutParams(lp);
         add.setImageDrawable(getResources().getDrawable(R.drawable.add_box, null));
         TextView addImage = new TextView(this);
@@ -109,7 +107,6 @@ public class ReviewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Log.d("photos", sharedPreferences.getString("photos", ""));
         String[] temp = sharedPreferences.getString("photos", "").split(", ");
         photos = Arrays.asList(temp);
         Log.d("photos as list", photos.toString() + " " + photos.size());
@@ -136,6 +133,7 @@ public class ReviewActivity extends AppCompatActivity {
             StorageReference riversRef = storageReference.child(images.get(i));
             UploadTask uploadTask = riversRef.putFile(file);
             Log.d("bucket", storageReference.getBucket());
+
             // Register observers to listen for when the download is done or if it fails
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override

@@ -155,9 +155,7 @@ public class MapFragment extends Fragment {
                 mp = mapboxMap;
 
                 mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/obaldwingeil/ckvb9vhch8pg615s210bol8g0"), new Style.OnStyleLoaded() {
-                    // styles: https://docs.mapbox.com/api/maps/styles/#mapbox-styles
-                    // custom: mapbox://styles/obaldwingeil/ckvb9vhch8pg615s210bol8g0
-                    // outdoors: mapbox://styles/mapbox/outdoors-v11
+
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
@@ -264,8 +262,6 @@ public class MapFragment extends Fragment {
                 markerAnimator = new ValueAnimator();
                 markerAnimator.setFloatValues(1f, 2f);
                 markerAnimator.setDuration(300);
-                // markerAnimator.setRepeatCount(ValueAnimator.INFINITE);
-                // markerAnimator.setRepeatMode(ValueAnimator.REVERSE);
                 markerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animator) {
@@ -322,7 +318,6 @@ public class MapFragment extends Fragment {
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 300);
     }
 
@@ -330,6 +325,7 @@ public class MapFragment extends Fragment {
         if(popupWindow != null){
             popupWindow.dismiss();
         }
+
         // inflate the layout of the popup window
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -350,6 +346,7 @@ public class MapFragment extends Fragment {
         Intent intent = new Intent(context, LocationActivity.class);
 
         for (Map.Entry<String, JsonElement> entry : feature.properties().entrySet()) {
+
             // Log all the properties
             Log.d("d", String.format("%s = %s", entry.getKey(), entry.getValue()));
             switch (entry.getKey()) {
@@ -372,8 +369,7 @@ public class MapFragment extends Fragment {
         popupWindow = new PopupWindow(popupView, width, height, false);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 200);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 175);
 
         // dismiss the popup window when touched
         popupView.setOnTouchListener(new View.OnTouchListener() {
@@ -529,10 +525,6 @@ public class MapFragment extends Fragment {
             // check if location is enabled
             if (isLocationEnabled()) {
 
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<android.location.Location>() {
                     @Override
                     public void onComplete(@NonNull Task<android.location.Location> task) {
@@ -563,16 +555,14 @@ public class MapFragment extends Fragment {
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
 
-        // Initializing LocationRequest
-        // object with appropriate methods
+        // Initializing LocationRequest object with appropriate methods
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(5);
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
 
-        // setting LocationRequest
-        // on FusedLocationClient
+        // setting LocationRequest on FusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
@@ -599,8 +589,7 @@ public class MapFragment extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
-    // method to check
-    // if location is enabled
+    // method to check if location is enabled
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);

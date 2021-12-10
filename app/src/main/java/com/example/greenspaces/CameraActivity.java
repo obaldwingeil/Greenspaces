@@ -58,18 +58,15 @@ public class CameraActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
-
     }
     private String cameraID;
     private CameraDevice cameraDevice;
     private CameraCaptureSession cameraCaptureSession;
     private CaptureRequest.Builder captureRequestBuilder;
     private Size imageDimension;
-    private ImageReader imageReader;
 
     private File file;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
@@ -230,7 +227,6 @@ public class CameraActivity extends AppCompatActivity {
                     Log.d("camera_photos", photos);
                     editor.putString("photos", photos); // key:value
                     editor.apply();
-                    // finish();
                     createCameraPreview();
                 }
             };
@@ -260,7 +256,6 @@ public class CameraActivity extends AppCompatActivity {
         try{
             SurfaceTexture texture = textureView.getSurfaceTexture();
             assert texture != null;
-            // texture.setDefaultBufferSize(imageDimension.getWidth(), imageDimension.getHeight());
             texture.setDefaultBufferSize(600, 800);
             Surface surface = new Surface(texture);
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);

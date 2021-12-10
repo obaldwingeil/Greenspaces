@@ -1,7 +1,7 @@
 <resources>
 
     // paste the url that is hosting the server here:
-    <string name="api_root">http://134.69.212.136:5001/</string> // http://134.69.212.136:5000/https://baldwin-greenspaces.herokuapp.com/
+    <string name="api_root">http://134.69.212.136:5001/</string>
 
     <string name="mapbox_access_token">pk.eyJ1Ijoib2JhbGR3aW5nZWlsIiwiYSI6ImNrbGVoaDU3MTFlaGUyb3BjMzJuNjFrbTkifQ.cdIUohzmpDBF4kAUcHJqMg</string>
 

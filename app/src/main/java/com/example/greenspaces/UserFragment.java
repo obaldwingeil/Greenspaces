@@ -1,6 +1,5 @@
 package com.example.greenspaces;
 
-import android.app.FragmentContainer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,8 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class UserFragment extends Fragment {
@@ -68,7 +65,7 @@ public class UserFragment extends Fragment {
         textView_userName.setText(name);
 
         button_userReviews.setOnClickListener(v -> {
-            loadFragment(new MyReviewsFragment(), R.id.fragContainer_user);
+            loadFragment(new MyReviewsFragment(), R.id.fragContainer_location);
         });
 
         button_userPhotos.setOnClickListener(v -> {
@@ -77,7 +74,7 @@ public class UserFragment extends Fragment {
             bundle.putString("id", id);
             PhotosFragment photosFragment = new PhotosFragment();
             photosFragment.setArguments(bundle);
-            loadFragment(photosFragment, R.id.fragContainer_user);
+            loadFragment(photosFragment, R.id.fragContainer_location);
         });
 
         imageView_settings.setOnClickListener(v -> openSettings());
