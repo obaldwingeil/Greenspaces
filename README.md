@@ -7,7 +7,8 @@ Greenspaces is written in Java using Android Studio with a server and web scrape
 ## Running Locally
 ### Note: This app is configured to run on Android Studio Arctic Fox | 2020.3.1 Patch 3, other versions of android studio may not be compatible with the build. 
 
-In order to run the app in a development state, you will need to download Android Studio and some IDE suitible for python I use PyCharm. 
+In order to run the app in a development state, you will need to download Android Studio and some IDE suitible for python. I use PyCharm. You will also need to set up an instance of a MySQL database. To do this and monitor my database, I used MySQL workbench.
+
 In Android Studio, Create a new project from version control by going to File --> New... --> Project from version control. As pictured below. 
 
 ![Android Studio From Version Control Image](https://github.com/obaldwingeil/Greenspaces/blob/main/AS-from-version-control.png?raw=true)
@@ -18,13 +19,27 @@ Enter this url https://github.com/obaldwingeil/Greenspaces.git in the URL box an
 
 Once you are loaded into android studio, you're ready to set up the backend. Repeat the steps from above in your python IDE to create a new python project from version control using the url for the Greenspaces-backend repo. 
 
-For example, in pycharm, click the `Get from Version Control` option displayed here:
+For example, in PyCharm, click the `Get from Version Control` option displayed here:
 
 ![PyCharm From Version Contrl Image](https://github.com/obaldwingeil/Greenspaces/blob/main/Py-from-version-control.png?raw=true)
 
 Then paste this url: https://github.com/obaldwingeil/Greenspaces-backend.git into the URL box. Hit `Clone` and open the files!
 
 ![PyCharm Enter URL Image](https://github.com/obaldwingeil/Greenspaces/blob/main/Py-enter-url.png?raw=true)
+
+To use my web scraper to populate your database and to use my server code to pull data from your database, you will need to set up a connection in the `server.py` file. 
+
+Open the file and locate line 4: 
+
+![DB Connection](https://github.com/obaldwingeil/Greenspaces/blob/main/DB-connection.png?raw=true)
+
+Enter your MySQL credentials to connect to your database. If you are using MySQL workbench, you can find or create your credentials on the Users and Privilages page. 
+
+![MySQL Credentials](https://github.com/obaldwingeil/Greenspaces/blob/main/MySQL-credentials.png?raw=true)
+
+Now to populate your database, open the `write_data.py` file. Scroll down to the main method and uncomment each of the method calls. I suggest running each method one at a time and check that the data is properly uploading into your database. This way, if something goes wrong, you don't have to delete everything to run again. 
+
+![Fill Database](https://github.com/obaldwingeil/Greenspaces/blob/main/fill-database.png?raw=true)
 
 Now navigate to the `read_data.py` file. Run this file and you should get a display message that looks like this: 
 
