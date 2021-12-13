@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.fragment.app.testing.FragmentScenario;
@@ -57,6 +58,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import com.google.android.flexbox.FlexboxLayout;
+
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -70,13 +73,14 @@ public class ExampleInstrumentedTest {
     private ArrayList<Location> locationArrayList = new ArrayList<>();
     private ArrayList<String> location_ids = new ArrayList<>();
 
+    Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
     /* @Rule
     public ActivityScenarioRule homeActivityTestRule = new ActivityScenarioRule<>(HomeActivity.class); */
 
     @Rule
     public ActivityTestRule<HomeActivity> mActivityRule = new ActivityTestRule<>(HomeActivity.class);
 
-    /*
     @Test
     public void useAppContext() {
         // Context of the app under test.
@@ -92,14 +96,13 @@ public class ExampleInstrumentedTest {
         FragmentScenario.launchInContainer(SearchFragment.class);
         onView(withId(R.id.textView_filter)).check(matches(withText("FILTER")));
         onView(withId(R.id.toggleButton_map)).perform(click());
-    } */
+    }
 
     // Helper method to return the itemCount of a given recyclerView
     private int getListCount(RecyclerView view){
         return view.getAdapter().getItemCount();
     }
 
-    /*
     // Section 1.1: List Search
     // test 1.1.1
     // List Fragment is launched with given args
@@ -215,7 +218,7 @@ public class ExampleInstrumentedTest {
 
         onView(withId(R.id.mapView)).perform(clickXY(100,450));
         // onView(withId(R.id.linearLayout_locationItem)).check(matches(isDisplayed()));
-    } */
+    }
 
     // Section 2: User Fragment
     // test 2
@@ -228,23 +231,56 @@ public class ExampleInstrumentedTest {
     }
 
     // Section 2.1: User Reviews
-    // test 2.1
+    // test 2.1.1
     // RecyclerView of user reviews is displayed when 'My Reviews' button is clicked
     @Test
     public void userMyReviews(){
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString("user_id", "111000376207439384827");
+        editor.commit();
+
         FragmentScenario.launchInContainer(UserFragment.class);
-        onView(withId(R.id.textView_userName)).check(matches(isDisplayed()));
         onView(withId(R.id.button_userReviews)).perform(click());
         
         FragmentScenario scenario = FragmentScenario.launchInContainer(MyReviewsFragment.class);
         scenario.onFragment(fragment -> {
             assertTrue(getListCount(fragment.getView().findViewById(R.id.recyclerView_myReviews)) == 1);
         });
-
     }
 
+    // test 2.1.2
+    // No reviews dialogue is displayed when 'My Reviews' fragment does not return any reviews
+    @Test
+    public void noReviews(){
+        FragmentScenario.launchInContainer(MyReviewsFragment.class);
+        onView(withId(R.id.textView_noReviews)).check(matches(isDisplayed()));
+    }
 
+    // Section 2.2: User Photos
+    // test 2.2
+    // Flexbox with user photos is displayed when 'My Photos' button is clicked
+    @Test
+    public void myPhotos(){
+        FragmentScenario.launchInContainer(UserFragment.class);
+        onView(withId(R.id.button_userPhotos)).perform(click());
 
+        Bundle fragmentArgs = new Bundle();
+        fragmentArgs.putString("id", "111000376207439384827");
+        fragmentArgs.putString("parent", "user");
+        FragmentScenario.launchInContainer(PhotosFragment.class, fragmentArgs);
 
+        onView(withId(R.id.flexBox_photos)).check(matches(isDisplayed()));
+    }
 
+    // test 2.2.2
+    // No photos dialogue is displayed when 'My Photos' does not return any photos
+    @Test
+    public void noPhotos(){
+        Bundle fragmentArgs = new Bundle();
+        fragmentArgs.putString("id", "5");
+        fragmentArgs.putString("parent", "user");
+        FragmentScenario.launchInContainer(PhotosFragment.class, fragmentArgs);
+
+        onView(withId(R.id.textView_noPhotos)).check(matches(isDisplayed()));
+    }
 }
